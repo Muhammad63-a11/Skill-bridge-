@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillBridge — Freelance. Grow. Earn.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0D0D0D;
+    --paper:   #F7F5F0;
+    --lime:    #C8F04A;
+    --slate:   #2B2D35;
+    --mist:    #E8E6DF;
+    --dim:     #6B6B72;
+    --card:    #FFFFFF;
+    --radius:  14px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(247,245,240,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--mist);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 22px; letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--lime); background: var(--ink); padding: 2px 6px; border-radius: 4px; }
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul a { text-decoration: none; color: var(--dim); font-size: 14px; font-weight: 500; transition: color .2s; }
+  nav ul a:hover { color: var(--ink); }
+  .nav-cta {
+    background: var(--ink); color: var(--paper);
+    padding: 10px 22px; border-radius: 8px;
+    font-size: 14px; font-weight: 600; text-decoration: none;
+    transition: background .2s;
+  }
+  .nav-cta:hover { background: var(--slate); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--lime); color: var(--ink);
+    padding: 6px 14px; border-radius: 99px;
+    font-size: 12px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 28px;
+  }
+  .hero-tag .dot { width: 6px; height: 6px; background: var(--ink); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 800; line-height: 1.0;
+    letter-spacing: -2px; margin-bottom: 24px;
+  }
+  h1 em { font-style: normal; color: var(--dim); }
+  .hero-sub {
+    font-size: 17px; color: var(--dim); line-height: 1.7;
+    max-width: 460px; margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--ink); color: var(--lime);
+    padding: 16px 32px; border-radius: 10px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+  .btn-secondary {
+    background: transparent; color: var(--ink);
+    padding: 16px 28px; border-radius: 10px;
+    font-size: 15px; font-weight: 500; text-decoration: none;
+    border: 1.5px solid var(--ink);
+    transition: background .2s;
+  }
+  .btn-secondary:hover { background: var(--mist); }
+
+  /* Hero visual — skill cards orbit */
+  .hero-visual {
+    position: relative; height: 480px; display: flex; align-items: center; justify-content: center;
+  }
+  .orbit-center {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: var(--ink); display: flex; align-items: center; justify-content: center;
+    position: absolute; z-index: 2;
+  }
+  .orbit-center svg { width: 48px; height: 48px; fill: var(--lime); }
+  .orbit-ring {
+    position: absolute; border-radius: 50%; border: 1.5px dashed var(--mist);
+  }
+  .ring1 { width: 260px; height: 260px; animation: spin 18s linear infinite; }
+  .ring2 { width: 420px; height: 420px; animation: spin 28s linear infinite reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .skill-card {
+    position: absolute; background: var(--card);
+    border-radius: 12px; padding: 12px 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 600; white-space: nowrap;
+    border: 1px solid var(--mist);
+  }
+  .skill-card .icon { font-size: 20px; }
+  .skill-card .earn { font-size: 11px; color: var(--dim); font-weight: 400; }
+
+  /* Positioned skill cards */
+  .sc1 { top: 40px; left: 60px; }
+  .sc2 { top: 80px; right: 30px; }
+  .sc3 { bottom: 120px; left: 20px; }
+  .sc4 { bottom: 60px; right: 60px; }
+  .sc5 { top: 200px; left: -10px; }
+  .sc6 { top: 160px; right: -10px; }
+
+  /* ── STATS STRIP ── */
+  .stats {
+    background: var(--ink); color: var(--paper);
+    padding: 40px 48px;
+    display: flex; justify-content: center; gap: 80px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800;
+    color: var(--lime); line-height: 1;
+  }
+  .stat-label { font-size: 13px; color: #888; margin-top: 6px; }
+
+  /* ── HOW IT WORKS ── */
+  section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+
+  .section-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--dim); margin-bottom: 14px;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px;
+  }
+  .section-sub { color: var(--dim); font-size: 16px; line-height: 1.7; max-width: 520px; margin-bottom: 60px; }
+
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .step {
+    background: var(--card); border-radius: var(--radius);
+    padding: 36px 32px;
+    border: 1px solid var(--mist);
+    position: relative; overflow: hidden;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .step:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
+  .step-num {
+    font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800;
+    color: var(--mist); line-height: 1; margin-bottom: 20px;
+    position: absolute; top: 16px; right: 24px;
+  }
+  .step-icon { font-size: 32px; margin-bottom: 18px; }
+  .step h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+  .step p { color: var(--dim); font-size: 14px; line-height: 1.7; }
+
+  /* ── SKILL TRACKS ── */
+  .tracks-section { background: var(--ink); color: var(--paper); padding: 100px 48px; }
+  .tracks-inner { max-width: 1200px; margin: 0 auto; }
+  .tracks-section .section-eyebrow { color: #666; }
+  .tracks-section h2 { color: var(--paper); }
+  .tracks-section .section-sub { color: #888; }
+
+  .tracks-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .track {
+    background: var(--slate); border-radius: var(--radius);
+    padding: 28px 24px; cursor: pointer;
+    border: 1px solid #333;
+    transition: border-color .25s, background .25s;
+    position: relative; overflow: hidden;
+  }
+  .track:hover { border-color: var(--lime); background: #1e2028; }
+  .track-emoji { font-size: 32px; margin-bottom: 14px; }
+  .track h4 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .track p { font-size: 13px; color: #888; line-height: 1.6; }
+  .track .count {
+    display: inline-block; margin-top: 16px;
+    background: rgba(200,240,74,.12); color: var(--lime);
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px;
+  }
+
+  /* ── FREELANCER CARDS ── */
+  .freelancers { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+  .fl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .fl-card {
+    background: var(--card); border-radius: var(--radius); padding: 28px;
+    border: 1px solid var(--mist);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .fl-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.08); }
+  .fl-header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .fl-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: var(--ink);
+    flex-shrink: 0;
+  }
+  .fl-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+  .fl-title { font-size: 13px; color: var(--dim); }
+  .fl-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .fl-skill-tag {
+    background: var(--mist); color: var(--ink);
+    font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px;
+  }
+  .fl-footer { display: flex; align-items: center; justify-content: space-between; }
+  .fl-rate { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+  .fl-rate span { font-size: 12px; color: var(--dim); font-family: 'Inter', sans-serif; font-weight: 400; }
+  .fl-rating { font-size: 13px; color: var(--dim); }
+  .fl-rating strong { color: var(--ink); }
+
+  /* ── SKILL BOOST ── */
+  .boost {
+    background: var(--lime); border-radius: 24px; margin: 0 48px 100px;
+    padding: 80px 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .boost h2 { letter-spacing: -1.5px; }
+  .boost .section-sub { color: #444; margin-bottom: 32px; }
+  .boost-features { display: flex; flex-direction: column; gap: 20px; }
+  .boost-feat { display: flex; align-items: flex-start; gap: 16px; }
+  .boost-feat-icon {
+    width: 42px; height: 42px; background: var(--ink); color: var(--lime);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .boost-feat h4 { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .boost-feat p { font-size: 13px; color: #444; line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: var(--paper);
+    padding: 60px 48px 40px;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    padding-bottom: 48px; border-bottom: 1px solid #222;
+  }
+  .footer-brand p { color: #666; font-size: 14px; line-height: 1.7; margin-top: 14px; max-width: 280px; }
+  footer h5 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 16px; color: #aaa; }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  footer ul a { color: #666; font-size: 14px; text-decoration: none; transition: color .2s; }
+  footer ul a:hover { color: var(--lime); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto; padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: #444;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    section { padding: 70px 24px; }
+    .steps { grid-template-columns: 1fr; }
+    .tracks-grid { grid-template-columns: 1fr 1fr; }
+    .fl-grid { grid-template-columns: 1fr; }
+    .boost { grid-template-columns: 1fr; margin: 0 24px 70px; padding: 48px 32px; }
+    .stats { gap: 40px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Skill<span>Bridge</span></div>
+  <ul>
+    <li><a href="#">How It Works</a></li>
+    <li><a href="#">Explore Skills</a></li>
+    <li><a href="#">Find Talent</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Start Free →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag"><span class="dot"></span> Free to join, free to grow</div>
+      <h1>Freelance.<br><em>Learn.</em><br>Earn more.</h1>
+      <p class="hero-sub">SkillBridge connects freelancers with clients — and gives you the tools to sharpen your craft while you work. No commissions on your first $1,000.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Join as Freelancer →</a>
+        <a href="#" class="btn-secondary">Hire Talent</a>
+      </div>
+    </div>
+
+    <!-- Orbital skill cards visual -->
+    <div class="hero-visual">
+      <div class="orbit-ring ring1"></div>
+      <div class="orbit-ring ring2"></div>
+      <div class="orbit-center">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="skill-card sc1"><span class="icon">🎨</span><div><div>UI Design</div><div class="earn">$45–90/hr</div></div></div>
+      <div class="skill-card sc2"><span class="icon">💻</span><div><div>Web Dev</div><div class="earn">$50–120/hr</div></div></div>
+      <div class="skill-card sc3"><span class="icon">✍️</span><div><div>Copywriting</div><div class="earn">$30–70/hr</div></div></div>
+      <div class="skill-card sc4"><span class="icon">📱</span><div><div>App Dev</div><div class="earn">$60–140/hr</div></div></div>
+      <div class="skill-card sc5"><span class="icon">📊</span><div><div>Data Analysis</div><div class="earn">$40–100/hr</div></div></div>
+      <div class="skill-card sc6"><span class="icon">🎬</span><div><div>Video Edit</div><div class="earn">$35–80/hr</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">48K+</div><div class="stat-label">Active Freelancers</div></div>
+  <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Platform Fee (First $1K)</div></div>
+  <div class="stat"><div class="stat-num">120+</div><div class="stat-label">Skill Categories</div></div>
+  <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Average Rating</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-eyebrow">The process</div>
+  <h2>From zero to earning in three steps</h2>
+  <p class="section-sub">SkillBridge is built for people who are still learning and people who are already pros. You grow either way.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">🪪</div>
+      <h3>Build your profile</h3>
+      <p>Set up a profile that showcases your skills, portfolio, and learning goals. Takes under 10 minutes. No fees, no credit card.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">🎯</div>
+      <h3>Get matched to gigs</h3>
+      <p>Our matching engine pairs you with projects that fit your current skill level — not just your dream level. Real work from day one.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">📈</div>
+      <h3>Complete, level up, earn</h3>
+      <p>Finish projects, collect reviews, and unlock higher-tier gigs. Your skill score grows with every delivery.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SKILL TRACKS -->
+<div class="tracks-section">
+  <div class="tracks-inner">
+    <div class="section-eyebrow">Skill categories</div>
+    <h2>Pick your lane.</h2>
+    <p class="section-sub">Browse over 120 skill tracks with built-in learning resources so you can earn while you grow.</p>
+    <div class="tracks-grid">
+      <div class="track">
+        <div class="track-emoji">🎨</div>
+        <h4>Design & Creative</h4>
+        <p>UI/UX, branding, illustration, motion graphics, and more.</p>
+        <span class="count">2,400+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">💻</div>
+        <h4>Tech & Development</h4>
+        <p>Web, mobile, backend, DevOps, ML & AI.</p>
+        <span class="count">5,100+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">✍️</div>
+        <h4>Writing & Content</h4>
+        <p>Copywriting, blogging, SEO, scripts, and translation.</p>
+        <span class="count">1,800+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">📊</div>
+        <h4>Data & Analytics</h4>
+        <p>Data cleaning, dashboards, research, and visualization.</p>
+        <span class="count">900+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">🎬</div>
+        <h4>Video & Media</h4>
+        <p>Editing, animation, podcasting, and short-form content.</p>
+        <span class="count">1,200+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">📣</div>
+        <h4>Marketing</h4>
+        <p>Social media, ads, email campaigns, and growth hacking.</p>
+        <span class="count">1,500+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">🎓</div>
+        <h4>Tutoring & Training</h4>
+        <p>Teach what you know — courses, 1:1 sessions, workshops.</p>
+        <span class="count">700+ gigs</span>
+      </div>
+      <div class="track">
+        <div class="track-emoji">⚙️</div>
+        <h4>Business Support</h4>
+        <p>Admin, customer service, bookkeeping, and operations.</p>
+        <span class="count">880+ gigs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED FREELANCERS -->
+<div class="freelancers">
+  <div class="section-eyebrow">Top talent</div>
+  <h2>Real people. Real skills.</h2>
+  <p class="section-sub" style="margin-bottom:48px">Every profile is verified. Every review is from a completed project.</p>
+  <div class="fl-grid">
+    <div class="fl-card">
+      <div class="fl-header">
+        <div class="fl-avatar" style="background:#D4F5A0;">A</div>
+        <div>
+          <div class="fl-name">Aisha Noor</div>
+          <div class="fl-title">UI/UX Designer · Lahore</div>
+        </div>
+      </div>
+      <div class="fl-skills">
+        <span class="fl-skill-tag">Figma</span>
+        <span class="fl-skill-tag">Prototyping</span>
+        <span class="fl-skill-tag">User Research</span>
+      </div>
+      <div class="fl-footer">
+        <div class="fl-rate">$45<span>/hr</span></div>
+        <div class="fl-rating">⭐ <strong>4.97</strong> · 84 reviews</div>
+      </div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header">
+        <div class="fl-avatar" style="background:#B5E8FF;">Z</div>
+        <div>
+          <div class="fl-name">Zain Ali</div>
+          <div class="fl-title">Full-Stack Developer · Karachi</div>
+        </div>
+      </div>
+      <div class="fl-skills">
+        <span class="fl-skill-tag">React</span>
+        <span class="fl-skill-tag">Node.js</span>
+        <span class="fl-skill-tag">PostgreSQL</span>
+      </div>
+      <div class="fl-footer">
+        <div class="fl-rate">$70<span>/hr</span></div>
+        <div class="fl-rating">⭐ <strong>4.95</strong> · 112 reviews</div>
+      </div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header">
+        <div class="fl-avatar" style="background:#FFD6A5;">M</div>
+        <div>
+          <div class="fl-name">Maria Santos</div>
+          <div class="fl-title">Content Strategist · Manila</div>
+        </div>
+      </div>
+      <div class="fl-skills">
+        <span class="fl-skill-tag">SEO Writing</span>
+        <span class="fl-skill-tag">Email Copy</span>
+        <span class="fl-skill-tag">Blogs</span>
+      </div>
+      <div class="fl-footer">
+        <div class="fl-rate">$38<span>/hr</span></div>
+        <div class="fl-rating">⭐ <strong>4.92</strong> · 67 reviews</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SKILL BOOST SECTION -->
+<div class="boost">
+  <div>
+    <div class="section-eyebrow">What makes us different</div>
+    <h2>A platform that actually helps you improve</h2>
+    <p class="section-sub">Most platforms take a cut and stay silent. SkillBridge gives you feedback, resources, and a path to better-paying work — while you earn.</p>
+    <a href="#" class="btn-primary" style="background:var(--ink);color:var(--lime);">Start Growing Free →</a>
+  </div>
+  <div class="boost-features">
+    <div class="boost-feat">
+      <div class="boost-feat-icon">🧠</div>
+      <div>
+        <h4>Skill Score System</h4>
+        <p>Your score grows with every project you complete. Higher scores unlock higher-paying gigs automatically.</p>
+      </div>
+    </div>
+    <div class="boost-feat">
+      <div class="boost-feat-icon">📚</div>
+      <div>
+        <h4>Curated Learning Paths</h4>
+        <p>Each skill track comes with a curated set of free resources — videos, tools, and practice challenges.</p>
+      </div>
+    </div>
+    <div class="boost-feat">
+      <div class="boost-feat-icon">💬</div>
+      <div>
+        <h4>AI Feedback on Deliverables</h4>
+        <p>Before you submit, get quick feedback on your work. Improve the output, get better reviews.</p>
+      </div>
+    </div>
+    <div class="boost-feat">
+      <div class="boost-feat-icon">🤝</div>
+      <div>
+        <h4>Mentor Matching</h4>
+        <p>Connect with senior freelancers in your field for 30-minute guidance calls — free with your account.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">Skill<span>Bridge</span></div>
+      <p>A free platform where freelancers find work, learn new skills, and build sustainable careers — without the heavy fees.</p>
+    </div>
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="#">How it Works</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Skill Tracks</a></li>
+        <li><a href="#">Leaderboard</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>For Freelancers</h5>
+      <ul>
+        <li><a href="#">Create Profile</a></li>
+        <li><a href="#">Browse Gigs</a></li>
+        <li><a href="#">Skill Score</a></li>
+        <li><a href="#">Mentors</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>For Clients</h5>
+      <ul>
+        <li><a href="#">Post a Project</a></li>
+        <li><a href="#">Find Talent</a></li>
+        <li><a href="#">Teams</a></li>
+        <li><a href="#">Enterprise</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SkillBridge. Free for everyone.</span>
+    <span>Privacy · Terms · Support</span>
+  </div>
+</footer>
+
+</body>
+</html>
